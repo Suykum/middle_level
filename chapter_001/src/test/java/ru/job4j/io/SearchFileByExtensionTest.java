@@ -1,5 +1,6 @@
 package ru.job4j.io;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import static org.hamcrest.Matchers.is;
 public class SearchFileByExtensionTest {
     SearchFileByExtension search = new SearchFileByExtension();
 
+    @Ignore
     @Test
     public void whenSearch() throws IOException {
         String dir = System.getProperty("java.io.tmpdir");
