@@ -10,29 +10,25 @@ public class ConsoleChat {
     private boolean stopBot = false;
     private boolean quit = false;
 
-    public void chat() throws IOException {
-        File chatLog = new File("log.txt");
+
+    public void chat(BufferedWriter writer, BufferedReader consoleInput) throws IOException {
         List<String> phrases = loadPhrases();
         String userString;
         String botString;
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(chatLog, true));
-             BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in))) {
+        do {
+            System.out.print("User: ");
+            userString = consoleInput.readLine();
+            writeLog(writer, userString, "User");
+            if (userString.equals("stop") || userString.equals("continue") || userString.equals("quit")) {
+                controlDecision(userString);
+            }
 
-            do {
-                System.out.print("User: ");
-                userString = consoleInput.readLine();
-                writeLog(writer, userString, "User");
-                if (userString.equals("stop") || userString.equals("continue") || userString.equals("quit")) {
-                    controlDecision(userString);
-                }
-
-                if (!stopBot) {
-                    botString = phrases.get((int) (Math.random() * phrases.size()));
-                    System.out.println("Bot: " + botString);
-                    writeLog(writer, botString, "Bot");
-                }
-            } while (!quit);
-        }
+            if (!stopBot) {
+                botString = phrases.get((int) (Math.random() * phrases.size()));
+                System.out.println("Bot: " + botString);
+                writeLog(writer, botString, "Bot");
+            }
+        } while (!quit);
     }
 
     private void controlDecision(String userDecision) {
@@ -51,6 +47,7 @@ public class ConsoleChat {
 
     private void writeLog(Writer writer, String chatConversation, String owner) throws IOException {
         writer.write(new GregorianCalendar().getTime() + " " + owner + ": " + chatConversation + System.lineSeparator());
+        writer.flush();
     }
 
     private List<String> loadPhrases() throws IOException {
@@ -65,13 +62,14 @@ public class ConsoleChat {
         return phrases;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        File chatLog = new File("log.txt");
         ConsoleChat consoleChat = new ConsoleChat();
-        try {
-            consoleChat.chat();
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(chatLog, true));
+             BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in))) {
+            consoleChat.chat(writer, consoleInput);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 }
