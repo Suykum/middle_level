@@ -15,7 +15,7 @@ import static org.mockito.Mockito.when;
 
 
 public class BotServerTest {
-    String ln = System.lineSeparator();
+    String ln = System.getProperty("line.separator");
 
     @Test
     public void whenSayHello() {
@@ -25,7 +25,7 @@ public class BotServerTest {
         );
         String outStr = Joiner.on(ln).join(
                 "Hello, dear friend, I'm a oracle.",
-                "bye bye\r\n"
+                "bye bye\n"
         );
         serverTest(inStr, outStr);
     }
@@ -38,7 +38,7 @@ public class BotServerTest {
         );
         String outStr = Joiner.on(ln).join(
                 "No idea ...",
-                "bye bye\r\n"
+                "bye bye\n"
         );
         serverTest(inStr, outStr);
     }
@@ -46,7 +46,7 @@ public class BotServerTest {
     @Test
     public void whenSayExit() {
         String inStr = "exit";
-        String outStr = "bye bye\r\n";
+        String outStr = "bye bye\n";
         serverTest(inStr, outStr);
     }
 
