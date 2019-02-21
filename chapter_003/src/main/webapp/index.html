@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/main.css" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script  src ="scripts/todo.js"></script>
+    <title>ToDoList</title>
+</head>
+
+<body>
+    <h2>ITEMS LIST</h2>
+
+    <table id="table">
+        <tbody>
+        <tr>
+            <td>ID</td>
+            <td>Description</td>
+            <td>Created</td>
+            <td>Done</td>
+            <td>Checked</td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <label>ToDoList</label>
+    <input id="check" type="checkbox" onclick="toDoList()">
+    <br>
+    <br>
+
+    <form action="/toDo" method="post">
+        <label for="description">Description:</label>
+        <input type='text' name='desc' id="description"><br>
+        <br>
+        <label>&nbsp;</label>
+        <input type='submit' value='Add New Item' onclick="return descValidate();"><br><br>
+    </form>
+</body>
+</html>

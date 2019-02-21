@@ -1,0 +1,6 @@
+create database items;
+create table items(id serial primary key, description varchar(250), created date, done boolean);
+insert into items(description, created, done) values ('description No 1', '2019-02-20', true);
+insert into items(description, created, done) values ('description No 2', '2019-02-20', true);
+insert into items(description, created, done) values ('description No 3', '2019-02-20', false);
+insert into items(description, created, done) values ('description No 4', '2019-02-20', false);
