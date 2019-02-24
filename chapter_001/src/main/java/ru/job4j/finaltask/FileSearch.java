@@ -12,18 +12,17 @@ import static java.nio.file.FileVisitResult.CONTINUE;
 
 public class FileSearch {
 
-    public static class MyFileVisitor extends SimpleFileVisitor<Path> {
+    public static class FileVisitor extends SimpleFileVisitor<Path> {
         private final PathMatcher matcher;
         private String logFile;
         private int numMatches = 0;
 
-        public MyFileVisitor(String pattern, String logFile) {
+        public FileVisitor(String pattern, String logFile) {
             matcher = FileSystems.getDefault().getPathMatcher("glob:" + pattern);
             this.logFile = logFile;
         }
 
-        // Compares the glob pattern against
-        // the file or directory name.
+        // Сравнивает шаблон поиска с именем файлом
         private void find(Path file) throws IOException {
             Path name = file.getFileName();
             if (name != null && matcher.matches(name)) {
@@ -37,23 +36,15 @@ public class FileSearch {
             return numMatches;
         }
 
-        // Invoke the pattern matching
-        // method on each file.
+        //включает в себя метод, которое следует выполнить во время посещения текущего файла
         @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
             find(file);
             return CONTINUE;
         }
 
-        // Invoke the pattern matching
-        // method on each directory.
         @Override
-        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-            find(dir);
-            return CONTINUE;
-        }
-
-        @Override
+        //Данный метод может пригодиться при ошибке доступа к файлу (при отказе доступа продолжать обход)
         public FileVisitResult visitFileFailed(Path file, IOException exc) {
             System.err.println(exc);
             return CONTINUE;
@@ -82,7 +73,7 @@ public class FileSearch {
         Path startDir = Paths.get(options.dir);
         String pattern = options.name;
         String logFile = options.output;
-        MyFileVisitor visitor = new MyFileVisitor(pattern, logFile);
+        FileVisitor visitor = new FileVisitor(pattern, logFile);
         Files.walkFileTree(startDir, visitor);
         System.out.println("Matches: " + visitor.getNumMatches());
     }
