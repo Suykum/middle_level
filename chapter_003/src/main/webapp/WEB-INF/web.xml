@@ -12,4 +12,14 @@
         <servlet-name>toDoList</servlet-name>
         <url-pattern>/toDo</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>status</servlet-name>
+        <servlet-class>ru.job4j.services.StatusChangeServlet</servlet-class>
+
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>status</servlet-name>
+        <url-pattern>/status.do</url-pattern>
+    </servlet-mapping>
 </web-app>

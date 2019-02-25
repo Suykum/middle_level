@@ -29,4 +29,16 @@ public class ItemService {
         session.close();
         factory.close();
     }
+
+    public void changeStatus(int id, boolean done) {
+        SessionFactory factory = new Configuration().configure().buildSessionFactory();
+        Session session = factory.openSession();
+        session.beginTransaction();
+        Item item = session.get(Item.class, id);
+        item.setDone(done);
+        session.update(item);
+        session.getTransaction().commit();
+        session.close();
+        factory.close();
+    }
 }
