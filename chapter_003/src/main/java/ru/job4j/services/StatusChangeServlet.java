@@ -14,8 +14,6 @@ public class StatusChangeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("taskId"));
         boolean done = Boolean.valueOf(req.getParameter("taskDone"));
-        System.out.println(id);
-        System.out.println(done);
         itemService.changeStatus(id, done);
     }
 }

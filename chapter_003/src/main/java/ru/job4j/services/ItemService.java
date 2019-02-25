@@ -8,30 +8,26 @@ import ru.job4j.models.Item;
 import java.util.List;
 
 public class ItemService {
+    SessionFactory factory = new Configuration().configure().buildSessionFactory();
 
     public List<Item> getItems() {
-        SessionFactory factory = new Configuration().configure().buildSessionFactory();
         Session session = factory.openSession();
         session.beginTransaction();
         List<Item> list = session.createQuery("from Item").list();
         session.getTransaction().commit();
         session.close();
-        factory.close();
         return list;
     }
 
     public void insertItem(Item item) {
-        SessionFactory factory = new Configuration().configure().buildSessionFactory();
         Session session = factory.openSession();
         session.beginTransaction();
         session.save(item);
         session.getTransaction().commit();
         session.close();
-        factory.close();
     }
 
     public void changeStatus(int id, boolean done) {
-        SessionFactory factory = new Configuration().configure().buildSessionFactory();
         Session session = factory.openSession();
         session.beginTransaction();
         Item item = session.get(Item.class, id);
@@ -39,6 +35,5 @@ public class ItemService {
         session.update(item);
         session.getTransaction().commit();
         session.close();
-        factory.close();
     }
 }
