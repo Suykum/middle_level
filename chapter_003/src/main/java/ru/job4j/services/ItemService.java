@@ -8,7 +8,7 @@ import ru.job4j.models.Item;
 import java.util.List;
 
 public class ItemService {
-    SessionFactory factory = new Configuration().configure().buildSessionFactory();
+    private SessionFactory factory = new Configuration().configure().buildSessionFactory();
 
     public List<Item> getItems() {
         Session session = factory.openSession();
