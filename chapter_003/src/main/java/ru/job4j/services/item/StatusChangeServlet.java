@@ -1,4 +1,6 @@
-package ru.job4j.services;
+package ru.job4j.services.item;
+
+import ru.job4j.services.item.ItemService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

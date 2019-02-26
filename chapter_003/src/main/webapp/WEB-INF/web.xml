@@ -5,7 +5,7 @@
          version="2.4">
     <servlet>
         <servlet-name>toDoList</servlet-name>
-        <servlet-class>ru.job4j.services.ToDoListServlet</servlet-class>
+        <servlet-class>ru.job4j.services.item.ToDoListServlet</servlet-class>
 
     </servlet>
     <servlet-mapping>
@@ -15,7 +15,7 @@
 
     <servlet>
         <servlet-name>status</servlet-name>
-        <servlet-class>ru.job4j.services.StatusChangeServlet</servlet-class>
+        <servlet-class>ru.job4j.services.item.StatusChangeServlet</servlet-class>
 
     </servlet>
     <servlet-mapping>

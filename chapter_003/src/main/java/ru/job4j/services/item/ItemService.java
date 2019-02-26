@@ -1,4 +1,4 @@
-package ru.job4j.services;
+package ru.job4j.services.item;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
