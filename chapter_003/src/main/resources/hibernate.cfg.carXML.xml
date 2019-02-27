@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-configuration>
+    <session-factory>
+        <property name="connection.url">jdbc:postgresql://localhost:5432/car_catalog</property>
+        <property name="connection.driver_class">org.postgresql.Driver</property>
+        <property name="connection.username">postgres</property>
+        <property name="connection.password">password</property>
+        <property name="dialect">org.hibernate.dialect.PostgreSQL94Dialect</property>
+        <property name="show_sql">true</property>
+
+        <mapping class="ru.job4j.models.Car"/>
+        <mapping class="ru.job4j.models.CarBody"/>
+        <mapping class="ru.job4j.models.CarEngine"/>
+        <mapping class="ru.job4j.models.CarTransmission"/>
+
+    </session-factory>
+</hibernate-configuration>

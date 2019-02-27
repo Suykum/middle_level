@@ -1,0 +1,8 @@
+<hibernate-mapping>
+    <class name="ru.job4j.models.CarTransmission" table="transmission">
+        <id name="transmissionId" column="transmission_id">
+            <generator class="identity"/>
+        </id>
+        <property name="transmissionType" column="transmission_type"/>
+    </class>
+</hibernate-mapping>
