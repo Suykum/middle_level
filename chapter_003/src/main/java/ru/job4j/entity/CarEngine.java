@@ -46,11 +46,15 @@ public class CarEngine {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         CarEngine carEngine = (CarEngine) o;
-        return engineId == carEngine.engineId &&
-                Objects.equals(engineType, carEngine.engineType);
+        return engineId == carEngine.engineId
+                && Objects.equals(engineType, carEngine.engineType);
     }
 
     @Override

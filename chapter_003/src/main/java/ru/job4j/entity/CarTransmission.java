@@ -47,11 +47,15 @@ public class CarTransmission {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         CarTransmission that = (CarTransmission) o;
-        return transmissionId == that.transmissionId &&
-                Objects.equals(transmissionType, that.transmissionType);
+        return transmissionId == that.transmissionId
+                && Objects.equals(transmissionType, that.transmissionType);
     }
 
     @Override
