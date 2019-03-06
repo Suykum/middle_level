@@ -4,7 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import ru.job4j.models.Item;
+import ru.job4j.entity.Item;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;

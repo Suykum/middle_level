@@ -4,10 +4,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import ru.job4j.models.xml.Car;
-import ru.job4j.models.xml.CarBody;
-import ru.job4j.models.xml.CarEngine;
-import ru.job4j.models.xml.CarTransmission;
+import ru.job4j.entity.xml.Car;
+import ru.job4j.entity.xml.CarBody;
+import ru.job4j.entity.xml.CarEngine;
+import ru.job4j.entity.xml.CarTransmission;
 
 import java.util.List;
 import java.util.function.Function;

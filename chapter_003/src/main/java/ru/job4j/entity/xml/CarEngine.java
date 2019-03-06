@@ -1,4 +1,4 @@
-package ru.job4j.models.xml;
+package ru.job4j.entity.xml;
 
 
 

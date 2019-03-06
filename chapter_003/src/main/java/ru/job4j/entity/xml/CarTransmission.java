@@ -1,17 +1,9 @@
-package ru.job4j.models;
+package ru.job4j.entity.xml;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "transmission")
 public class CarTransmission {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "transmission_id")
     private int transmissionId;
 
-    @Column(name = "transmission_type")
     private String transmissionType;
 
     public CarTransmission() { }

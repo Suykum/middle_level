@@ -6,7 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 @Ignore
 public class CarStoreTest {
-    CarStore store = CarStore.getInstance();
+    CarStoreUnused store = CarStoreUnused.getInstance();
 
     @Test
     public void whenAddDeleteBody() {

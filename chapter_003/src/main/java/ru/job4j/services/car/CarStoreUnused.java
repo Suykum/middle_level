@@ -4,29 +4,22 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import ru.job4j.models.Car;
-import ru.job4j.models.CarBody;
-import ru.job4j.models.CarEngine;
-import ru.job4j.models.CarTransmission;
+import ru.job4j.entity.*;
 
 import java.util.List;
 import java.util.function.Function;
 
-public class CarStore {
-    private static CarStore instance = new CarStore();
+public class CarStoreUnused {
+    private static CarStoreUnused instance = new CarStoreUnused();
 
-    public static CarStore getInstance() {
+    public static CarStoreUnused getInstance() {
         return instance;
     }
 
-    private CarStore() {
+    private CarStoreUnused() {
     }
     private SessionFactory factory =  new Configuration()
                                             .configure()
-                                            .addAnnotatedClass(Car.class)
-                                            .addAnnotatedClass(CarBody.class)
-                                            .addAnnotatedClass(CarEngine.class)
-                                            .addAnnotatedClass(CarTransmission.class)
                                             .buildSessionFactory();
 
     private <T> T tx(final Function<Session, T> command) {

@@ -1,8 +1,7 @@
 package ru.job4j.services.item;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ru.job4j.models.Item;
-import ru.job4j.services.item.ItemService;
+import ru.job4j.entity.Item;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

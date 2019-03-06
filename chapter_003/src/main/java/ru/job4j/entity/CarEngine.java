@@ -1,6 +1,7 @@
-package ru.job4j.models;
+package ru.job4j.entity;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "engine")
@@ -41,5 +42,20 @@ public class CarEngine {
                 + "engineId=" + engineId
                 + ", engineType='" + engineType + '\''
                 + '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CarEngine carEngine = (CarEngine) o;
+        return engineId == carEngine.engineId &&
+                Objects.equals(engineType, carEngine.engineType);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(engineId, engineType);
     }
 }

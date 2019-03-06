@@ -1,5 +1,5 @@
 <hibernate-mapping>
-    <class name="ru.job4j.models.xml.CarBody" table="body">
+    <class name="ru.job4j.entity.xml.CarBody" table="body">
         <id name="bodyId" column="body_id">
             <generator class="identity"/>
         </id>
