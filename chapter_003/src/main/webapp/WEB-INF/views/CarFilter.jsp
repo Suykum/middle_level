@@ -18,7 +18,15 @@
                 data: ({carId: carId, sold: $(this).is(':checked')})
             });
         });
-
+        $(document).on('click', 'input[name=filterSold]', function () {
+            //var carId = $(this).attr('id');
+            $.ajax({
+                url: 'contentFilter.do',
+                type: 'get',
+                contentType: 'text/html',
+                data: ({sold: $(this).is(':checked')})
+            });
+        });
     </script>
 </head>
 <body>
@@ -85,18 +93,6 @@
         </tr>
     </c:forEach>
 </table>
-<form method="get" action="${pageContext.servletContext.contextPath}/contentFilter.do">
-    <label>With Images</label>
-    <input type="checkbox" name="filterImage" value="image">
-    <br>
-    <label>Only cars fo sale: </label>
-    <input type="checkbox" name="filterSold" value="sold">
-    <br>
-    <label>With Car Name</label>
-    <input type="text" name="filterName">
-    <br>
-    <input type="submit" value="Filter" >
-</form>
 
 
 <br>
@@ -113,3 +109,4 @@
 
 
 </html>
+
