@@ -26,7 +26,8 @@ public class EngineStore implements Store<CarEngine> {
 
     @Override
     public int delete(int id) {
-        return Wrapper.tx(session -> { CarEngine engine = session.get(CarEngine.class, id); session.delete(engine); return engine.getEngineId(); });
+        return Wrapper.tx(session ->
+        { CarEngine engine = session.get(CarEngine.class, id); session.delete(engine); return engine.getEngineId(); });
     }
 
     @Override
@@ -44,7 +45,8 @@ public class EngineStore implements Store<CarEngine> {
         CarEngine engine;
         try {
             engine = Wrapper.tx(session ->
-                    session.createQuery("select E from CarEngine E where E.engineType = : name", CarEngine.class).setParameter("name", name).getSingleResult());
+                    session.createQuery("select E from CarEngine E where E.engineType = : name", CarEngine.class)
+                            .setParameter("name", name).getSingleResult());
         } catch (Exception e) {
             return null;
         }

@@ -5,6 +5,7 @@ import jdk.nashorn.internal.ir.annotations.Ignore;
 import javax.persistence.*;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Objects;
 
 @Entity
 @Table(name = "image")
@@ -69,5 +70,27 @@ public class Image {
                 + "id=" + id
                 + ", image=" + Arrays.toString(image)
                 + '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Image image1 = (Image) o;
+        return id == image1.id
+                && Arrays.equals(image, image1.image)
+                && Objects.equals(car, image1.car);
+    }
+
+    @Override
+    public int hashCode() {
+
+        int result = Objects.hash(id, car);
+        result = 31 * result + Arrays.hashCode(image);
+        return result;
     }
 }

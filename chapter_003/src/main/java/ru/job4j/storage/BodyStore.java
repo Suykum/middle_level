@@ -27,7 +27,8 @@ public class BodyStore implements Store<CarBody> {
 
     @Override
     public int delete(int id) {
-        return Wrapper.tx(session -> { CarBody body = session.get(CarBody.class, id); session.delete(body); return body.getBodyId(); });
+        return Wrapper.tx(session ->
+        { CarBody body = session.get(CarBody.class, id); session.delete(body); return body.getBodyId(); });
     }
 
     @Override
@@ -45,7 +46,8 @@ public class BodyStore implements Store<CarBody> {
         CarBody body;
         try {
             body = Wrapper.tx(session ->
-                    session.createQuery("select B from CarBody B where B.bodyType = : bodyName", CarBody.class).setParameter("bodyName", bodyName).getSingleResult());
+                    session.createQuery("select B from CarBody B where B.bodyType = : bodyName", CarBody.class)
+                            .setParameter("bodyName", bodyName).getSingleResult());
         } catch (Exception e) {
             return null;
         }

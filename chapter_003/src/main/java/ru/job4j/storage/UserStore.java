@@ -44,7 +44,8 @@ public class UserStore implements Store<User> {
         User user;
         try {
             user = Wrapper.tx(session ->
-                    session.createQuery("select U from User U where U.login = : name", User.class).setParameter("name", name).getSingleResult());
+                    session.createQuery("select U from User U where U.login = : name", User.class)
+                            .setParameter("name", name).getSingleResult());
         } catch (Exception e) {
             return null;
         }
@@ -55,7 +56,8 @@ public class UserStore implements Store<User> {
         User user;
         try {
             user = Wrapper.tx(session ->
-                    session.createQuery("select U from User U where U.login = ?1 and U.password = ?2", User.class).setParameter(1, login).setParameter(2, password).getSingleResult());
+                    session.createQuery("select U from User U where U.login = ?1 and U.password = ?2", User.class)
+                            .setParameter(1, login).setParameter(2, password).getSingleResult());
         } catch (Exception e) {
             return null;
         }

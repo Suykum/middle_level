@@ -26,7 +26,9 @@ public class TransmissionStore implements Store<CarTransmission> {
 
     @Override
     public int delete(int id) {
-        return Wrapper.tx(session -> { CarTransmission transmission = session.get(CarTransmission.class, id); session.delete(transmission); return transmission.getTransmissionId(); });
+        return Wrapper.tx(session ->
+        { CarTransmission transmission = session.get(CarTransmission.class, id); session.delete(transmission);
+        return transmission.getTransmissionId(); });
     }
 
     @Override
@@ -44,7 +46,8 @@ public class TransmissionStore implements Store<CarTransmission> {
         CarTransmission transmission;
         try {
             transmission = Wrapper.tx(session ->
-                    session.createQuery("select T from CarTransmission T where T.transmissionType = : name", CarTransmission.class).setParameter("name", name).getSingleResult());
+                    session.createQuery("select T from CarTransmission T where T.transmissionType = : name", CarTransmission.class)
+                            .setParameter("name", name).getSingleResult());
         } catch (Exception e) {
             return null;
         }

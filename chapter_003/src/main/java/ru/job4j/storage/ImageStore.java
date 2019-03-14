@@ -45,6 +45,8 @@ public class ImageStore implements Store<Image> {
     }
 
     public List<Image> getImagesByCarId(int carId) {
-         return Wrapper.tx(session -> session.createQuery("select I from Image I where I.car.id = : carId", Image.class).setParameter("carId", carId).getResultList());
+         return Wrapper.tx(session ->
+                 session.createQuery("select I from Image I where I.car.id = : carId", Image.class)
+                         .setParameter("carId", carId).getResultList());
     }
 }

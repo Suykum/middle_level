@@ -19,9 +19,9 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ImageUploadServlet extends HttpServlet {
-    ImageStore imageStore = ImageStore.getInstance();
-    CarStore carStore = CarStore.getInstance();
-    int carId;
+    private ImageStore imageStore = ImageStore.getInstance();
+    private CarStore carStore = CarStore.getInstance();
+    private int carId;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -45,8 +45,7 @@ public class ImageUploadServlet extends HttpServlet {
                     FileItem item = (FileItem) iterator.next();
                     if (!item.isFormField()) {
                         byte[] bytes = IOUtils.toByteArray(item.getInputStream());
-                        image = new Image();
-                        image.setImage(bytes);
+                        image = new Image(bytes);
                         image.setCar(car);
                         result = imageStore.add(image);
                     }
@@ -57,7 +56,6 @@ public class ImageUploadServlet extends HttpServlet {
         }
         if (result > 0) {
             resp.sendRedirect(String.format("%s/", req.getContextPath()));
-            //req.setAttribute("carId", carId);
         } else {
             req.setAttribute("error", "Cannot be uploaded");
             doGet(req, resp);

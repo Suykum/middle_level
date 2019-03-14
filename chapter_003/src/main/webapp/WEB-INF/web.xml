@@ -151,4 +151,14 @@
         <url-pattern>/imageUpload.do</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>ContentFilter</servlet-name>
+        <servlet-class>ru.job4j.servlets.ContentFilterServlet</servlet-class>
+
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ContentFilter</servlet-name>
+        <url-pattern>/contentFilter.do</url-pattern>
+    </servlet-mapping>
+
 </web-app>

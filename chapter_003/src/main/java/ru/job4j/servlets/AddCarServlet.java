@@ -10,6 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class AddCarServlet extends HttpServlet {
+
+    private CarStore carStore = CarStore.getInstance();
+    private UserStore userStore = UserStore.getInstance();
+
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html");
@@ -18,14 +23,6 @@ public class AddCarServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        CarStore carStore = CarStore.getInstance();
-        BodyStore bodyStore = BodyStore.getInstance();
-        EngineStore engineStore = EngineStore.getInstance();
-        TransmissionStore transmissionStore = TransmissionStore.getInstance();
-        UserStore userStore = UserStore.getInstance();
-
-        // ValidateUser
-
         String name = req.getParameter("name");
         String body = req.getParameter("body");
         String engine = req.getParameter("engine");
@@ -35,35 +32,12 @@ public class AddCarServlet extends HttpServlet {
         String owner = req.getParameter("owner");
 
         Car car = new Car(name);
-
-        CarBody carBody = bodyStore.getByName(body);
-        if (carBody == null) {
-            carBody = new CarBody(body);
-            bodyStore.add(carBody);
-        }
-        car.setBody(carBody);
-
-        CarEngine carEngine = engineStore.getByName(engine);
-        if (carEngine == null) {
-            carEngine = new CarEngine(engine);
-            engineStore.add(carEngine);
-        }
-        car.setEngine(carEngine);
-
-        CarTransmission carTransmission = transmissionStore.getByName(transmission);
-        if (carTransmission == null) {
-            carTransmission = new CarTransmission(transmission);
-            transmissionStore.add(carTransmission);
-        }
-        car.setTransmission(carTransmission);
-
-        User carOwner = userStore.getByName(owner);
-        car.setUser(carOwner);
+        car = carStore.contructCar(car, body, engine, transmission);
         car.setLocation(location);
         car.setPrice(price);
+        car.setUser(userStore.getByName(owner));
+
         int result = carStore.add(car);
-
-
         if (result > 0) {
             resp.sendRedirect(String.format("%s/", req.getContextPath()));
         } else {

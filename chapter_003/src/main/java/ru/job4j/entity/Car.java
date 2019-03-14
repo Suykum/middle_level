@@ -3,6 +3,7 @@ package ru.job4j.entity;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "cars")
@@ -152,5 +153,32 @@ public class Car {
                 + ", location=" + location
                 + ", user=" + user
                 + '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Car car = (Car) o;
+        return id == car.id
+                && price == car.price
+                && sold == car.sold
+                && Objects.equals(name, car.name)
+                && Objects.equals(body, car.body)
+                && Objects.equals(engine, car.engine)
+                && Objects.equals(transmission, car.transmission)
+                && Objects.equals(location, car.location)
+                && Objects.equals(user, car.user)
+                && Objects.equals(images, car.images);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, name, body, engine, transmission, price, sold, location, user, images);
     }
 }

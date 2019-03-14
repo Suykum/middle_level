@@ -8,15 +8,19 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ValidateUser implements Validate {
-    private static ValidateUser ourInstance = new ValidateUser();
+    private static final ValidateUser INSTANCE = new ValidateUser();
 
-    public static ValidateUser getInstance() {
-        return ourInstance;
-    }
+    private final UserStore userStore = UserStore.getInstance();
 
     private static final Logger LOGGER = Logger.getLogger(ValidateUser.class);
 
-    private UserStore userStore = UserStore.getInstance();
+    private static final String EMAIL_REGEX = "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$";
+
+    private static final Pattern PATTERN = Pattern.compile(EMAIL_REGEX, Pattern.CASE_INSENSITIVE);
+
+    public static ValidateUser getInstance() {
+        return INSTANCE;
+    }
 
     private ValidateUser() {
     }
@@ -26,7 +30,11 @@ public class ValidateUser implements Validate {
     public boolean add(User user) {
         int result = 0;
         try {
-            if (user.getLogin() != null && user.getEmail() != null && !isLoginEmailExist(user.getLogin(), user.getEmail()) && emailValidation(user.getEmail())) {
+            if (user.getLogin() != null
+                    && user.getEmail() != null
+                    && !isLoginEmailExist(user.getLogin(), user.getEmail())
+                    && emailValidation(user.getEmail())) {
+
                 result = userStore.add(user);
             }
         } catch (UserException e) {
@@ -39,8 +47,10 @@ public class ValidateUser implements Validate {
     public boolean update(User user) {
         int result = 0;
         try {
-            if (user.getLogin() != null && user.getEmail() != null
-                    && !isLoginEmailExistForUpdate(user.getId(), user.getLogin(), user.getEmail()) && emailValidation(user.getEmail())) {
+            if (user.getLogin() != null
+                    && user.getEmail() != null
+                    && !isLoginEmailExistForUpdate(user.getId(), user.getLogin(), user.getEmail())
+                    && emailValidation(user.getEmail())) {
                 result = userStore.update(user);
             }
         } catch (UserException e) {
@@ -66,9 +76,7 @@ public class ValidateUser implements Validate {
     }
 
     private boolean emailValidation(String email) throws UserException {
-        String emailRegex = "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$";
-        Pattern pattern = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(email);
+        Matcher matcher = PATTERN.matcher(email);
         boolean r = true;
         if (!matcher.matches()) {
             throw new UserException("Enter valid email address");
