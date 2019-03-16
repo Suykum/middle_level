@@ -40,12 +40,12 @@ public class UserStore implements Store<User> {
     }
 
     @Override
-    public User getByName(String name) {
+    public User getByName(String loginName) {
         User user;
         try {
             user = Wrapper.tx(session ->
                     session.createQuery("select U from User U where U.login = : name", User.class)
-                            .setParameter("name", name).getSingleResult());
+                            .setParameter("name", loginName).getSingleResult());
         } catch (Exception e) {
             return null;
         }

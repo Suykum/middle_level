@@ -55,6 +55,6 @@ public class TransmissionStore implements Store<CarTransmission> {
     }
 
     public List<String> getTransmissionTypes() {
-        return Wrapper.tx(session -> session.createQuery("select T.transmissionType from CarTransmission T").list());
+        return Wrapper.tx(session -> session.createQuery("select distinct T.transmissionType from CarTransmission T").list());
     }
 }

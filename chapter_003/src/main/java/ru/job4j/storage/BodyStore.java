@@ -55,6 +55,6 @@ public class BodyStore implements Store<CarBody> {
     }
 
     public List<String> getBodyTypes() {
-        return Wrapper.tx(session -> session.createQuery("select B.bodyType from CarBody B").list());
+        return Wrapper.tx(session -> session.createQuery("select distinct B.bodyType from CarBody B").list());
     }
 }

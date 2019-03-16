@@ -54,7 +54,7 @@ public class EngineStore implements Store<CarEngine> {
     }
 
     public List<String> getEngineTypes() {
-        return Wrapper.tx(session -> session.createQuery("select E.engineType from CarEngine E").list());
+        return Wrapper.tx(session -> session.createQuery("select distinct E.engineType from CarEngine E").list());
     }
 
 
