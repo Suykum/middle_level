@@ -43,5 +43,7 @@ chapter_004 - Spring:
  
 Объединение зафиксированных изменений
 
+hotfix changes
+
 
  
