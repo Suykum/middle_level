@@ -41,6 +41,11 @@ chapter_004 - Spring:
 
 
  
+ 
+ GIT commands for creating new branch:
+ git branch
+ git branch new_branch_name
+ git checkout new_branch_name
 
 
 
