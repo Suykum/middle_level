@@ -14,14 +14,16 @@ public class Wrapper {
     public static  <T> T tx(final Function<Session, T> command) {
         final Session session = factory.openSession();
         final org.hibernate.Transaction transaction = session.beginTransaction();
+        T result;
         try {
-            return command.apply(session);
+            result = command.apply(session);
+            transaction.commit();
         } catch (final Exception e) {
             session.getTransaction().rollback();
             throw e;
         } finally {
-            transaction.commit();
             session.close();
         }
+        return result;
     }
 }

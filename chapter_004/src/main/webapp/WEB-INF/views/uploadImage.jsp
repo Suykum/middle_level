@@ -9,12 +9,12 @@
 <html>
 <head>
     <title>Upload</title>
-    <link rel="stylesheet" href="../../css/main.css" type="text/css">
+    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resource/css/main.css">
 </head>
 <body>
 <h2>Upload Car Images</h2>
 <br>
-<form method="post" action="${pageContext.servletContext.contextPath}/imageUpload.do" enctype="multipart/form-data">
+<form method="post" action="${pageContext.servletContext.contextPath}/imageUpload" enctype="multipart/form-data">
     <input type="file" name="image"  accept="image/gif, image/jpeg, image/png"><br><br>
     <input type="submit" value="Upload">
 </form>

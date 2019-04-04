@@ -5,6 +5,8 @@ import ru.job4j.car.entity.CarEngine;
 
 import java.util.List;
 
+import static ru.job4j.car.storage.Wrapper.tx;
+
 public class EngineStore implements Store<CarEngine> {
     private static EngineStore ourInstance = new EngineStore();
 
@@ -17,35 +19,35 @@ public class EngineStore implements Store<CarEngine> {
 
     @Override
     public int add(CarEngine entity) {
-        return Wrapper.tx(session -> { session.saveOrUpdate(entity); return entity.getEngineId(); });
+        return tx(session -> { session.saveOrUpdate(entity); return entity.getEngineId(); });
     }
 
     @Override
     public int update(CarEngine entity) {
-        return Wrapper.tx(session -> { session.update(entity); return entity.getEngineId(); });
+        return tx(session -> { session.update(entity); return entity.getEngineId(); });
     }
 
     @Override
     public int delete(int id) {
-        return Wrapper.tx(session ->
+        return tx(session ->
         { CarEngine engine = session.get(CarEngine.class, id); session.delete(engine); return engine.getEngineId(); });
     }
 
     @Override
     public List<CarEngine> getAll() {
-        return Wrapper.tx(session -> session.createQuery("from CarEngine ").list());
+        return tx(session -> session.createQuery("from CarEngine ").list());
     }
 
     @Override
     public CarEngine getById(int id) {
-        return Wrapper.tx(session -> session.get(CarEngine.class, id));
+        return tx(session -> session.get(CarEngine.class, id));
     }
 
     @Override
     public CarEngine getByName(String name) {
         CarEngine engine;
         try {
-            engine = Wrapper.tx(session ->
+            engine = tx(session ->
                     session.createQuery("select E from CarEngine E where E.engineType = : name", CarEngine.class)
                             .setParameter("name", name).getSingleResult());
         } catch (Exception e) {
@@ -55,7 +57,7 @@ public class EngineStore implements Store<CarEngine> {
     }
 
     public List<String> getEngineTypes() {
-        return Wrapper.tx(session -> session.createQuery("select distinct E.engineType from CarEngine E").list());
+        return tx(session -> session.createQuery("select distinct E.engineType from CarEngine E").list());
     }
 
 

@@ -8,6 +8,8 @@ import ru.job4j.car.entity.CarTransmission;
 
 import java.util.List;
 
+import static ru.job4j.car.storage.Wrapper.tx;
+
 public class CarStore implements Store<Car> {
     private static final CarStore INSTANCE = new CarStore();
 
@@ -25,34 +27,34 @@ public class CarStore implements Store<Car> {
 
     @Override
     public int add(Car entity) {
-        return Wrapper.tx(session ->  { session.saveOrUpdate(entity); return entity.getId(); });
+        return tx(session ->  { session.saveOrUpdate(entity); return entity.getId(); });
     }
 
     @Override
     public int update(Car entity) {
-        return Wrapper.tx(session -> { session.update(entity); return entity.getId(); });
+        return tx(session -> { session.update(entity); return entity.getId(); });
     }
 
     @Override
     public int delete(int id) {
-        return Wrapper.tx(session -> { Car car = session.get(Car.class, id); session.delete(car); return car.getId(); });
+        return tx(session -> { Car car = session.get(Car.class, id); session.delete(car); return car.getId(); });
     }
 
     @Override
     public List<Car> getAll() {
-        return Wrapper.tx(session -> session.createQuery("from Car ").list());
+        return tx(session -> session.createQuery("from Car ").list());
     }
 
     @Override
     public Car getById(int id) {
-        return Wrapper.tx(session -> session.get(Car.class, id));
+        return tx(session -> session.get(Car.class, id));
     }
 
     @Override
     public Car getByName(String name) {
         Car car;
         try {
-            car = Wrapper.tx(session ->
+            car = tx(session ->
                     session.createQuery("select C from Car C where C.name = : name", Car.class).setParameter("name", name).getSingleResult());
         } catch (Exception e) {
             return null;
@@ -60,24 +62,24 @@ public class CarStore implements Store<Car> {
         return car;
     }
 
-    public Car contructCar(Car car, String bodyType, String engineType, String transmissionType) {
-        CarBody carBody = bodyStore.getByName(bodyType);
+    public Car contructCar(Car car, CarBody bodyType, CarEngine engineType, CarTransmission transmissionType) {
+        CarBody carBody = bodyStore.getByName(bodyType.getBodyType());
         if (carBody == null) {
-            carBody = new CarBody(bodyType);
+            carBody = new CarBody(bodyType.getBodyType());
             bodyStore.add(carBody);
         }
         car.setBody(carBody);
 
-        CarEngine carEngine = engineStore.getByName(engineType);
+        CarEngine carEngine = engineStore.getByName(engineType.getEngineType());
         if (carEngine == null) {
-            carEngine = new CarEngine(engineType);
+            carEngine = new CarEngine(engineType.getEngineType());
             engineStore.add(carEngine);
         }
         car.setEngine(carEngine);
 
-        CarTransmission carTransmission = transmissionStore.getByName(transmissionType);
+        CarTransmission carTransmission = transmissionStore.getByName(transmissionType.getTransmissionType());
         if (carTransmission == null) {
-            carTransmission = new CarTransmission(transmissionType);
+            carTransmission = new CarTransmission(transmissionType.getTransmissionType());
             transmissionStore.add(carTransmission);
         }
         car.setTransmission(carTransmission);
@@ -86,21 +88,21 @@ public class CarStore implements Store<Car> {
     }
 
     public List<String> getLocation() {
-        return Wrapper.tx(session -> session.createQuery("select distinct C.location from Car C").list());
+        return tx(session -> session.createQuery("select distinct C.location from Car C").list());
     }
 
     public void statusChange(int id, boolean done) {
-        Wrapper.tx(session -> { Car car = session.get(Car.class, id); car.setSold(done); return null; });
+        tx(session -> { Car car = session.get(Car.class, id); car.setSold(done); return null; });
     }
 
     public List<Car> filterCarsBySold(boolean sold) {
-        return Wrapper.tx(session -> session.createQuery("select C from Car C where C.sold = : sold", Car.class)
+        return tx(session -> session.createQuery("select C from Car C where C.sold = : sold", Car.class)
                 .setParameter("sold", sold).getResultList());
     }
 
     public List<Car> filterCarsBySoldAndName(boolean sold, String name) {
         final String nameF = name.toLowerCase();
-        return Wrapper.tx(session ->
+        return tx(session ->
                 session.createQuery("select C from Car C where C.sold = : sold and lower(C.name) = : name", Car.class)
                 .setParameter("sold", sold)
                 .setParameter("name", nameF)
@@ -109,7 +111,7 @@ public class CarStore implements Store<Car> {
 
     public List<Car> filterCarsByName(String name) {
         final String nameF = name.toLowerCase();
-        return Wrapper.tx(session -> session.createQuery("select C from Car C where lower(C.name) = : name", Car.class)
+        return tx(session -> session.createQuery("select C from Car C where lower(C.name) = : name", Car.class)
                 .setParameter("name", nameF).getResultList());
     }
 }

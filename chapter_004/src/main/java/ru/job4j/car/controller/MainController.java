@@ -7,10 +7,13 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.job4j.car.entity.Car;
 import ru.job4j.car.entity.Image;
 import ru.job4j.car.storage.*;
@@ -25,12 +28,15 @@ import java.util.List;
 
 @Controller
 public class MainController {
-    private CarStore carStore = CarStore.getInstance();
-    private ImageStore imageStore = ImageStore.getInstance();
-    private BodyStore bodyStore = BodyStore.getInstance();
-    private EngineStore engineStore = EngineStore.getInstance();
-    private TransmissionStore transmissionStore = TransmissionStore.getInstance();
-    private int carIdForImage;
+    private static final Logger LOGGER = Logger.getLogger(MainController.class);
+
+    private final CarStore carStore = CarStore.getInstance();
+    private final ImageStore imageStore = ImageStore.getInstance();
+    private final BodyStore bodyStore = BodyStore.getInstance();
+    private final EngineStore engineStore = EngineStore.getInstance();
+    private final TransmissionStore transmissionStore = TransmissionStore.getInstance();
+    private int carIdForImage = 0;
+
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String listCars(Model model) {
@@ -40,7 +46,7 @@ public class MainController {
             images  = imageStore.getImagesByCarId(c.getId());
             c.setImages(images);
         }
-        System.out.println(list);
+        LOGGER.info(list);
         model.addAttribute("cars", list);
         return "Cars";
     }
@@ -53,19 +59,10 @@ public class MainController {
     }
 
     @RequestMapping(value = "/addCar", method = RequestMethod.POST)
-    public String addCar(HttpServletRequest req, Model model) {
-        String name = req.getParameter("name");
-        String body = req.getParameter("body");
-        String engine = req.getParameter("engine");
-        String transmission = req.getParameter("transmission");
-        String location = req.getParameter("location");
-        int price = Integer.parseInt(req.getParameter("price"));
-        //String owner = req.getParameter("owner");
+    public String addCar(@ModelAttribute("newCar") Car car, Model model) {
 
-        Car car = new Car(name);
-        car = carStore.contructCar(car, body, engine, transmission);
-        car.setLocation(location);
-        car.setPrice(price);
+        car = carStore.contructCar(car, car.getBody(), car.getEngine(), car.getTransmission());
+
         //car.setUser(userStore.getByName(owner));
 
         int result = carStore.add(car);
@@ -75,6 +72,7 @@ public class MainController {
             model.addAttribute("error", "Cannot be added");
             return "addCarForm";
         }
+
     }
 
     @RequestMapping("/getBody")
@@ -152,11 +150,11 @@ public class MainController {
         List<Image> images;
         List<Car> result = new ArrayList<>();
 
-        if (soldStatus != null && !name.equals("")) {
+        if (soldStatus != null && !name.isEmpty()) {
             list = carStore.filterCarsBySoldAndName(false, name);
         } else if (soldStatus != null) {
             list = carStore.filterCarsBySold(false);
-        } else if (!name.equals("")) {
+        } else if (!name.isEmpty()) {
             list = carStore.filterCarsByName(name);
         } else {
             list = carStore.getAll();
@@ -180,8 +178,8 @@ public class MainController {
     }
 
     @RequestMapping(value = "/imageUpload", method = RequestMethod.GET)
-    public String uploadImage(HttpServletRequest req) {
-        carIdForImage = Integer.valueOf(req.getParameter("carId"));
+    public String uploadImage(HttpServletRequest req, Model model) {
+        carIdForImage = Integer.valueOf(req.getParameter("carIdForImage"));
         return "uploadImage";
     }
 

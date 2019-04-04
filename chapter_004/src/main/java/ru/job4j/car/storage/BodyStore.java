@@ -5,6 +5,8 @@ import ru.job4j.car.entity.CarBody;
 
 import java.util.List;
 
+import static ru.job4j.car.storage.Wrapper.tx;
+
 public class BodyStore implements Store<CarBody> {
 
     private static BodyStore instance = new BodyStore();
@@ -17,35 +19,35 @@ public class BodyStore implements Store<CarBody> {
     }
     @Override
     public int add(CarBody entity) {
-        return Wrapper.tx(session -> { session.saveOrUpdate(entity); return entity.getBodyId(); });
+        return tx(session -> { session.saveOrUpdate(entity); return entity.getBodyId(); });
     }
 
     @Override
     public int update(CarBody entity) {
-        return Wrapper.tx(session -> { session.update(entity); return entity.getBodyId(); });
+        return tx(session -> { session.update(entity); return entity.getBodyId(); });
     }
 
     @Override
     public int delete(int id) {
-        return Wrapper.tx(session ->
+        return tx(session ->
         { CarBody body = session.get(CarBody.class, id); session.delete(body); return body.getBodyId(); });
     }
 
     @Override
     public List<CarBody> getAll() {
-        return Wrapper.tx(session -> session.createQuery("from CarBody ").list());
+        return tx(session -> session.createQuery("from CarBody ").list());
     }
 
     @Override
     public CarBody getById(int id) {
-        return Wrapper.tx(session -> session.get(CarBody.class, id));
+        return tx(session -> session.get(CarBody.class, id));
     }
 
     @Override
     public CarBody getByName(String bodyName) {
         CarBody body;
         try {
-            body = Wrapper.tx(session ->
+            body = tx(session ->
                     session.createQuery("select B from CarBody B where B.bodyType = : bodyName", CarBody.class)
                             .setParameter("bodyName", bodyName).getSingleResult());
         } catch (Exception e) {
@@ -55,6 +57,6 @@ public class BodyStore implements Store<CarBody> {
     }
 
     public List<String> getBodyTypes() {
-        return Wrapper.tx(session -> session.createQuery("select distinct B.bodyType from CarBody B").list());
+        return tx(session -> session.createQuery("select distinct B.bodyType from CarBody B").list());
     }
 }

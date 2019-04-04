@@ -9,131 +9,8 @@
     <title>AddCar</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="../../css/main.css" type="text/css">
-    <script>
-        $(document).ready(function () {
-            getBodyTypes();
-            getEngineTypes();
-            getTransTypes();
-            getLocation();
-        });
-        function validateUserInput() {
-            var name = document.getElementById("name").value;
-            var body = document.getElementById("body").value;
-            var engine = document.getElementById("engine").value;
-            var transmission = document.getElementById("transmission").value;
-            var location = document.getElementById("location").value;
-            var price = document.getElementById("price").value;
-            //var owner = document.getElementById("owner").value;
-
-            if (name === "") {
-                alert("Enter Car name");
-                return false;
-            } else if (body === "") {
-                alert("Choose car body type");
-                return false;
-            } else if (engine === "") {
-                alert("Chose car engine type");
-                return false;
-            } else if (transmission === "") {
-                alert("Chose car transmission type");
-                return false;
-            } else if (location === "") {
-                alert("Chose location");
-                return false;
-            } else if (price === "") {
-                alert("Enter car price");
-                return false;
-            } /*else if (owner === "") {
-                alert("Enter login name ");
-                return false;
-            }*/
-            return true;
-        }
-
-        function getBodyTypes() {
-            $.ajax({
-                type: "GET",
-                url: "getBody",
-                success: function (data) {
-                    console.log(data);
-                    $("#body option").not(":first").remove();
-                    $.each(data, function (indexInArray, value) {
-                        $('#body option:last').after('<option>' + value + '</option>');
-                    });
-
-                }
-            });
-        }
-        function addNewBodyType() {
-            var newBody = document.getElementById("newBody").value;
-            $('#body option:last').after('<option>' + newBody + '</option>');
-            document.getElementById("newBody").value = "";
-        }
-
-        function getEngineTypes() {
-            $.ajax({
-                type: "GET",
-                url: "getEngine",
-                success: function (data) {
-                    console.log(data);
-                    $("#engine option").not(":first").remove();
-                    $.each(data, function (indexInArray, value) {
-                        $('#engine option:last').after('<option>' + value + '</option>');
-                    });
-
-                }
-            });
-        }
-
-        function addNewEngineType() {
-            var newEngine = document.getElementById("newEngine").value;
-            $('#engine option:last').after('<option>' + newEngine + '</option>');
-            document.getElementById("newEngine").value = "";
-        }
-
-        function getTransTypes() {
-            $.ajax({
-                type: "GET",
-                url: "getTransmission",
-                success: function (data) {
-                    console.log(data);
-                    $("#transmission option").not(":first").remove();
-                    $.each(data, function (indexInArray, value) {
-                        $('#transmission option:last').after('<option>' + value + '</option>');
-                    });
-
-                }
-            });
-        }
-
-        function addNewTransType() {
-            var newTransmission = document.getElementById("newTransmission").value;
-            $('#transmission option:last').after('<option>' + newTransmission + '</option>');
-            document.getElementById("newTransmission").value = "";
-        }
-
-        function getLocation() {
-            $.ajax({
-                type: "GET",
-                url: "getLocation",
-                success: function (data) {
-                    console.log(data);
-                    $("#location option").not(":first").remove();
-                    $.each(data, function (indexInArray, value) {
-                        $('#location option:last').after('<option>' + value + '</option>');
-                    });
-
-                }
-            });
-        }
-
-        function addNewLocation() {
-            var newLocation = document.getElementById("newLocation").value;
-            $('#location option:last').after('<option>' + newLocation + '</option>');
-            document.getElementById("newLocation").value = "";
-        }
-    </script>
+    <script src="${pageContext.request.contextPath}/resource/scripts/addCar.js"></script>
+    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resource/css/main.css">
 </head>
 <body>
 <h2>ADD NEW CAR FOR SALE</h2>
@@ -181,9 +58,6 @@
 
     <!--label for="owner">Owner</label-->
     <!--form:input path="user" name="owner" id="owner"/--><br><br>
-
-
-
 
     <label>&nbsp;</label>
     <input type='submit' value='ADD' onclick="return validateUserInput()">

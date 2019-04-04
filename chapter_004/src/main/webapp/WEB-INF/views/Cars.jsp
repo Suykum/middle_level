@@ -2,10 +2,12 @@
 <%@ page import="java.util.List" %>
 <%@ page import="ru.job4j.car.storage.CarStore" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
 <head>
     <title>Car List</title>
-    <link rel="stylesheet" href="../../css/main.css" type="text/css">
+    <!--link rel="stylesheet" href="../../css/main.css" type="text/css"-->
+    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resource/css/main.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script>
@@ -58,14 +60,14 @@
                     </li>
                     <li>
                         <form method="get" action="${pageContext.servletContext.contextPath}/imageUpload">
-                            <input type="hidden" name="carId"  value="${car.id}">
+                            <input type="hidden" name="carIdForImage"  value="${car.id}">
                             <input type="submit" value="Upload Images">
                         </form>
                     </li>
                     <li>
                         <form method="post" action="${pageContext.servletContext.contextPath}/updateDelete">
                             <input type="hidden" name="carId"  value="${car.id}">
-                            <input type="submit" value="Delete Car">
+                            <input type="submit" onclick="if(!(confirm('Are you sure you want to delete this customer?'))) return false" value="Delete Car">
                         </form>
                         <c:if test="${not empty error}">
                             <c:out value='${error}'></c:out>
