@@ -16,7 +16,7 @@ public class Image {
     @Column(name = "image")
     private byte[] image;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "car_id")
     private Car car;
 

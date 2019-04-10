@@ -14,13 +14,12 @@
         $(document).on('click', 'input[name=checkSold]', function () {
             var carId = $(this).attr('id');
             $.ajax({
-                url: 'updateDelete',
-                type: 'get',
-                contentType: 'text/html',
+                type: 'GET',
+                url: 'soldStatusChange',
+                //contentType: 'text/html',
                 data: ({carId: carId, sold: $(this).is(':checked')})
             });
         });
-
     </script>
 </head>
 <body>

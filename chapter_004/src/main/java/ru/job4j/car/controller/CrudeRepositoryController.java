@@ -8,14 +8,16 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import ru.job4j.car.entity.Car;
 import ru.job4j.car.entity.Image;
+import ru.job4j.car.services.CarService;
+import ru.job4j.car.services.CarServiceImp;
 import ru.job4j.car.storage.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,24 +28,21 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-//@Controller
-public class MainController {
-    private static final Logger LOGGER = Logger.getLogger(MainController.class);
+@Controller
+public class CrudeRepositoryController {
+    private static final Logger LOGGER = Logger.getLogger(CrudeRepositoryController.class);
 
-    private final CarStore carStore = CarStore.getInstance();
-    private final ImageStore imageStore = ImageStore.getInstance();
-    private final BodyStore bodyStore = BodyStore.getInstance();
-    private final EngineStore engineStore = EngineStore.getInstance();
-    private final TransmissionStore transmissionStore = TransmissionStore.getInstance();
+    @Autowired
+    private CarService carService;
     private int carIdForImage = 0;
 
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String listCars(Model model) {
-        List<Car> list = carStore.getAll();
+        List<Car> list = carService.getAllCar();
         List<Image> images;
         for (Car c : list) {
-            images  = imageStore.getImagesByCarId(c.getId());
+            images  = carService.getImagesByCar(c);
             c.setImages(images);
         }
         LOGGER.info(list);
@@ -61,11 +60,11 @@ public class MainController {
     @RequestMapping(value = "/addCar", method = RequestMethod.POST)
     public String addCar(@ModelAttribute("newCar") Car car, Model model) {
 
-        car = carStore.contructCar(car, car.getBody(), car.getEngine(), car.getTransmission());
+        car = carService.contructCar(car, car.getBody(), car.getEngine(), car.getTransmission());
 
         //car.setUser(userStore.getByName(owner));
 
-        int result = carStore.add(car);
+        int result = carService.addCar(car);
         if (result > 0) {
             return "redirect:/";
         } else {
@@ -77,24 +76,24 @@ public class MainController {
 
     @RequestMapping("/getBody")
     public void getBodyTypes(HttpServletResponse resp) throws IOException {
-        List<String> bodyNames = bodyStore.getBodyTypes();
+        List<String> bodyNames = carService.getBodyTypes();
         ObjectMapper objectMapper = new ObjectMapper();
         String toJson = objectMapper.writeValueAsString(bodyNames);
         resp.setContentType("text/json");
         PrintWriter writer = new PrintWriter(resp.getOutputStream());
-        System.out.println(toJson);
+       LOGGER.info(toJson);
         writer.append(toJson);
         writer.flush();
     }
 
     @RequestMapping("/getEngine")
     public void getEngineType(HttpServletResponse resp) throws IOException {
-        List<String> engineNames = engineStore.getEngineTypes();
+        List<String> engineNames = carService.getEngineTypes();
         ObjectMapper objectMapper = new ObjectMapper();
         String toJson = objectMapper.writeValueAsString(engineNames);
         resp.setContentType("text/json");
         PrintWriter writer = new PrintWriter(resp.getOutputStream());
-        System.out.println(toJson);
+        LOGGER.info(toJson);
         writer.append(toJson);
         writer.flush();
 
@@ -102,42 +101,40 @@ public class MainController {
 
     @RequestMapping("/getTransmission")
     public void getTransmission(HttpServletResponse resp) throws IOException {
-        List<String> transNames = transmissionStore.getTransmissionTypes();
+        List<String> transNames = carService.getTransmissionTypes();
         ObjectMapper objectMapper = new ObjectMapper();
         String toJson = objectMapper.writeValueAsString(transNames);
         resp.setContentType("text/json");
         PrintWriter writer = new PrintWriter(resp.getOutputStream());
-        System.out.println(toJson);
+        LOGGER.info(toJson);
         writer.append(toJson);
         writer.flush();
     }
 
     @RequestMapping("/getLocation")
     public void getLocation(HttpServletResponse resp) throws IOException {
-        List<String> locations = carStore.getLocation();
+        List<String> locations = carService.getLocation();
         ObjectMapper objectMapper = new ObjectMapper();
         String toJson = objectMapper.writeValueAsString(locations);
         resp.setContentType("text/json");
         PrintWriter writer = new PrintWriter(resp.getOutputStream());
-        System.out.println(toJson);
+        LOGGER.info(toJson);
         writer.append(toJson);
         writer.flush();
     }
 
-    @RequestMapping(value = "/updateDelete", method = RequestMethod.GET)
+    @RequestMapping("/soldStatusChange")
     public void updateSoldStatus(HttpServletRequest req) {
         int id = Integer.parseInt(req.getParameter("carId"));
         boolean done = Boolean.valueOf(req.getParameter("sold"));
-        carStore.statusChange(id, done);
+        carService.statusChange(id, done);
     }
 
     @RequestMapping(value = "/updateDelete", method = RequestMethod.POST)
     public String deleteCar(HttpServletRequest req, Model model) {
         int id = Integer.valueOf(req.getParameter("carId"));
-        int result = carStore.delete(id);
-        if (result == 0) {
-            model.addAttribute("error", "Cannot be deleted");
-        }
+        Car car = carService.getCarById(id);
+        carService.deleteCar(car);
         return "redirect:/";
     }
 
@@ -151,17 +148,17 @@ public class MainController {
         List<Car> result = new ArrayList<>();
 
         if (soldStatus != null && !name.isEmpty()) {
-            list = carStore.filterCarsBySoldAndName(false, name);
+            list = carService.filterCarsBySoldAndName(false, name);
         } else if (soldStatus != null) {
-            list = carStore.filterCarsBySold(false);
+            list = carService.filterCarsBySold(false);
         } else if (!name.isEmpty()) {
-            list = carStore.filterCarsByName(name);
+            list = carService.filterCarsByName(name);
         } else {
-            list = carStore.getAll();
+            list = carService.getAllCar();
         }
 
         for (Car c : list) {
-            images  = imageStore.getImagesByCarId(c.getId());
+            images  = carService.getImagesByCar(c);
             c.setImages(images);
         }
 
@@ -185,7 +182,7 @@ public class MainController {
 
     @RequestMapping(value = "/imageUpload", method = RequestMethod.POST)
     public String addImage(HttpServletRequest req, Model model) throws IOException {
-        Car car = carStore.getById(carIdForImage);
+        Car car = carService.getCarById(carIdForImage);
         Image image;
         int result = 0;
         if (ServletFileUpload.isMultipartContent(req)) {
@@ -200,7 +197,7 @@ public class MainController {
                         byte[] bytes = IOUtils.toByteArray(item.getInputStream());
                         image = new Image(bytes);
                         image.setCar(car);
-                        result = imageStore.add(image);
+                        result = carService.addImage(image);
                     }
                 }
             } catch (FileUploadException e) {
